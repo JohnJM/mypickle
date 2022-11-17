@@ -1,13 +1,21 @@
 import { Request, Response } from "express";
-import { categories } from "../categories";
 import { prisma } from "../server";
+
+const createOrUpdateTags = async (name: string, categoryId: string) => {
+    const { id, count } = await prisma.tag.findFirst({ where: { name, categoryId } }) || {};
+    if (id && count) {
+        await prisma.tag.update({ where: { id }, data: { count: count + 1 } });
+    } else {
+        await prisma.tag.create({ data: { count: 1, name, categoryId } })
+    }
+}
 
 const addTagsToCategory = async ({ body: { categoryId, tagList } }: Request, res: Response) => {
     try {
-        console.log({ categoryId, tagList })
-        //loop over tags, check if exists in db (with the same categoryid)
-        //add the entry or increase the count
-        return res.status(200);
+        if (!tagList.length) return res.status(400).json({ error: 'no tags provided' })
+        await Promise.all(tagList.map((name: string) => createOrUpdateTags(name, categoryId)));
+        await prisma.category.update({ where: { id: categoryId }, data: { tagCount: { increment: tagList.length } } })
+        return res.status(201).json({ success: true })
     } catch (err) {
         const { message } = err as Error;
         return res.status(500).json({ error: message });

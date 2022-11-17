@@ -11,6 +11,7 @@ const rateLimiter = rateLimit(RATE_LIMIT_OPTIONS);
 
 const createServer = async () => {
     await prisma.$connect();
+    // await prisma.category.deleteMany({})
     return express();
 };
 const main = (app: Express) => {

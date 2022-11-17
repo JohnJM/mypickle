@@ -13,6 +13,7 @@ const genCategories = async (_req: Request, res: Response) => {
         const { count } = await prisma.category.createMany({
             data: [...Array(categories.length)].map((_, i) => ({
                 name: categories[i],
+                tagCount: 0
             })),
         });
         return res
