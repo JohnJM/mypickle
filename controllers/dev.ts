@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { categories } from "../categories";
 import { prisma } from "../server";
 
+const rngCategories = categories.sort(() => Math.random() - 0.5)
+
 const genCategories = async (_req: Request, res: Response) => {
     try {
         const existingCategories = await prisma.category.findMany();
@@ -11,8 +13,8 @@ const genCategories = async (_req: Request, res: Response) => {
                 .json({ existingCategories: true });
 
         const { count } = await prisma.category.createMany({
-            data: [...Array(categories.length)].map((_, i) => ({
-                name: categories[i],
+            data: [...Array(rngCategories.length)].map((_, i) => ({
+                name: rngCategories[i],
                 tagCount: 0
             })),
         });

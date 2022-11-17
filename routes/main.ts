@@ -1,12 +1,10 @@
 import { Router } from "express";
-import { addTagsToCategory } from "../controllers/category";
+import { addTagsToCategory, getCategories } from "../controllers/category";
 import { genCategories } from "../controllers/dev";
 
 const routes = Router();
 routes.post("/populateCategories", genCategories);
 routes.post("/addTagsToCategory", addTagsToCategory);
-
-// TODO
-// routes.get("/getNewCategory", getNewCategory);
+routes.get("/getCategories", getCategories);
 
 export { routes };
