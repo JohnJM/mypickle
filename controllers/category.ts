@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { CONSTANTS } from "../constants";
 import { prisma } from "../server";
+import { Category } from "@prisma/client";
 
 const createOrUpdateTags = async (name: string, categoryId: string) => {
     const { id, count } =
@@ -33,6 +34,7 @@ const addTagsToCategory = async (
     }
 };
 
+const mapCategories = (cat: Category) => ({ id: cat.id, name: cat.name });
 const getCategories = async (
     { body: { skip = 0, take = 5 } }: Request,
     res: Response
@@ -45,8 +47,8 @@ const getCategories = async (
                 tagCount: "asc",
             },
         });
-        return res.status(200).json({
-            categories: categories.map(cat => ({ id: cat.id, name: cat.name })),
+        return res.status(201).json({
+            categories: categories.map(mapCategories),
         });
     } catch (err) {
         const { message } = err as Error;

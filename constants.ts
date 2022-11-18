@@ -1,4 +1,3 @@
-import path from "path";
 import { categories } from "./categories";
 
 const RATE_LIMIT_OPTIONS = {

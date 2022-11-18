@@ -2,8 +2,7 @@ import { Request, Response } from "express";
 import { categories } from "../categories";
 import { prisma } from "../server";
 
-const rngCategories = categories.sort(() => Math.random() - 0.5)
-
+const rngCategories = categories.sort(() => Math.random() - 0.5);
 const genCategories = async (_req: Request, res: Response) => {
     try {
         const existingCategories = await prisma.category.findMany();

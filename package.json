@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fast-csv/format": "^4.3.5",
     "express": "^4.17.1",
     "express-rate-limit": "^6.6.0"
   },
