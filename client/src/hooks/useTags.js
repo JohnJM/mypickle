@@ -1,11 +1,18 @@
 import { createContext } from "preact";
 import { useContext, useEffect } from "preact/hooks";
+import axios from 'axios';
 
 export const TagContext = createContext();
+
+const baseURL = "http://localhost:3001";
+
+const api = axios.create({ baseURL });
 
 let categories = [];
 
 let currentIdx = 0;
+
+let initialised = false;
 
 const getNextCategory = () => {
   if (currentIdx === categories.length - 1) { 
@@ -18,16 +25,20 @@ const getNextCategory = () => {
 
 const populateCategories = async (setCategory) => {
   // @TODO: error handling
-  const response = await fetch('http://localhost:3001/getCategories');
-  const json = await response.json();
-  categories = json.categories;
+  const { data } = await api.get('/getCategories');
+  categories = data.categories;
   setCategory(categories[0]);
 }
 
 export const useTags = () => {
   const { tags, setTags, category, setCategory } = useContext(TagContext);
-  console.log({ currentIdx, categories });
-  useEffect(() => populateCategories(setCategory), [setCategory]);
+
+  useEffect(() => {
+    if (!initialised) {
+      populateCategories(setCategory)
+      initalised = true;
+    }
+  }, [setCategory]);
 
   const refresh = async () => {
     setTags([]);
@@ -36,8 +47,8 @@ export const useTags = () => {
     else populateCategories(setCategory);
   };
 
-  const submit = () => {
-    // @TODO: post tags
+  const submit = async () => {
+    api.post(`/addTagsToCategory`, { categoryId: category.id, tagList: tags });
     refresh();
   };
 
