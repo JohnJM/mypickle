@@ -25,7 +25,7 @@ export const TagAdder = () => {
         className="tagInput"
         placeholder="Enter keywords..."
         value={currentTag}
-        onChange={(e) => setCurrentTag(e.target.value)}
+        onInput={(e) => setCurrentTag(e.target.value)}
         onKeyPress={handleKeyPress}
       />
       <div className="submittedKeywords">
