@@ -13,7 +13,6 @@ const getNextCategory = () => {
     return false;
   }
   currentIdx++;
-  console.log({ categories, currentIdx });
   return categories[currentIdx];
 };
 
@@ -27,7 +26,7 @@ const populateCategories = async (setCategory) => {
 
 export const useTags = () => {
   const { tags, setTags, category, setCategory } = useContext(TagContext);
-
+  console.log({ currentIdx, categories });
   useEffect(() => populateCategories(setCategory), [setCategory]);
 
   const refresh = async () => {
