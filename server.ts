@@ -23,8 +23,8 @@ const main = (app: Express) => {
     app.use(morgan("dev"));
     app.use(cors());
     app.use(express.json());
-    app.use(`/${STATIC_DIRECTORY}`, express.static(path.join(__dirname, STATIC_DIRECTORY),
-    ));
+    app.use(`/${STATIC_DIRECTORY}`, express.static(path.join(__dirname, STATIC_DIRECTORY)));
+    app.use(express.static(path.join(__dirname, '/client/build')));
     app.use(routes);
 };
 

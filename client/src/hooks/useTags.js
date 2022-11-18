@@ -12,8 +12,6 @@ let categories = [];
 
 let currentIdx = 0;
 
-let initialised = false;
-
 const getNextCategory = () => {
   if (currentIdx === categories.length - 1) { 
     currentIdx = 0;
@@ -31,14 +29,14 @@ const populateCategories = async (setCategory) => {
 }
 
 export const useTags = () => {
-  const { tags, setTags, category, setCategory } = useContext(TagContext);
+  const { tags, setTags, category, setCategory, initialised, setInitialised } = useContext(TagContext);
 
   useEffect(() => {
     if (!initialised) {
+      setInitialised(true);
       populateCategories(setCategory)
-      initalised = true;
     }
-  }, [setCategory]);
+  }, [setCategory, setInitialised, initialised]);
 
   const refresh = async () => {
     setTags([]);
@@ -48,7 +46,7 @@ export const useTags = () => {
   };
 
   const submit = async () => {
-    api.post(`/addTagsToCategory`, { categoryId: category.id, tagList: tags });
+    api.post('/addTagsToCategory', { categoryId: category.id, tagList: tags });
     refresh();
   };
 

@@ -6,9 +6,10 @@ import "./styles.css";
 export default function App() {
   const [category, setCategory] = useState(undefined);
   const [tags, setTags] = useState([]);
+  const [initialised, setInitialised] = useState(false);
   return (
     <div className="App">
-      <TagContext.Provider value={{ tags, setTags, category, setCategory }}>
+      <TagContext.Provider value={{ tags, setTags, category, setCategory, initialised, setInitialised }}>
         <header>
           <MyPickleIcon />
           <Navigation />
