@@ -9,6 +9,6 @@ routes.get("/healthCheck", (_, res) => res.status(200).end());
 routes.post("/populateCategories", genCategories);
 routes.post("/addTagsToCategory", addTagsToCategory);
 routes.get("/getCategories", getCategories);
-routes.post("/generateCSV", generateCSV);
+routes.get("/generateCSV", generateCSV);
 
 export { routes };
