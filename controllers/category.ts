@@ -47,7 +47,7 @@ const getCategories = async (
                 tagCount: "asc",
             },
         });
-        return res.status(201).json({
+        return res.status(200).json({
             categories: categories.map(mapCategories),
         });
     } catch (err) {
