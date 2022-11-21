@@ -7,7 +7,7 @@ const RATE_LIMIT_OPTIONS = {
     legacyHeaders: false,
 };
 
-const SERVER_PORT = 3001;
+const SERVER_PORT = 10000;
 const STATIC_DIRECTORY = 'public';
 
 const CATEGORY_COUNT = categories.length || 1201
