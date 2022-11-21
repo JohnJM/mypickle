@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const TagContext = createContext();
 
-const baseURL = "http://localhost:3001";
+const baseURL = "http://localhost:10000";
 
 const api = axios.create({ baseURL });
 
