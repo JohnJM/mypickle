@@ -4,7 +4,7 @@ import { genCategories } from "../controllers/dev";
 import { generateCSV } from "../controllers/generateCsvOutput";
 
 const routes = Router();
-routes.get("/healthCheck", (_, res) => res.status(200));
+routes.get("/healthCheck", (_, res) => res.status(200).end());
 
 routes.post("/populateCategories", genCategories);
 routes.post("/addTagsToCategory", addTagsToCategory);
