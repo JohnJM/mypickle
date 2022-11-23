@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { categories } from "../categories";
-import { prisma } from "../server";
+import { categories } from "../../categories";
+import { prisma } from "../../server";
 import { writeToPath } from "@fast-csv/format";
 import { Category } from "@prisma/client";
 import path from "path";
-
+import { updateGoogleSpreadSheet } from "./googleSheetsIntegration";
 const addTags = async ({ id, name }: Category) => {
   const tags = await prisma.tag.findMany({
     where: { categoryId: id },
@@ -29,8 +29,8 @@ const generateCSV = async (_req: Request, res: Response) => {
       ["CATEGORY", "TAGS"],
       ...(await Promise.all(existingCategories.map(addTags))),
     ];
-
-    writeToPath(path.resolve(__dirname, "../public/output.csv"), output);
+    writeToPath(path.resolve(__dirname, "../../public/output.csv"), output);
+    await updateGoogleSpreadSheet(output)
     return res.status(200).json({ generatedCSV: true });
   } catch (err) {
     const { message } = err as Error;

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const TagContext = createContext();
 
-const baseURL = "https://mypickle.onrender.com";
+const baseURL = "http://localhost:10000";
 
 const api = axios.create({ baseURL });
 
