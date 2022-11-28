@@ -4,10 +4,9 @@ import { Navigation, TagAdder, MyPickleIcon } from "./components";
 import "./styles.css";
 
 // provider extracted to own component to avoid re-rendering all children on every state change
-const ContextWrapper = ({ children, ...values }) => 
-  <TagContext.Provider value={{ ...values }}>
-    {children}
-  </TagContext.Provider>
+const ContextWrapper = ({ children, ...values }) => (
+  <TagContext.Provider value={{ ...values }}>{children}</TagContext.Provider>
+);
 
 export default function App() {
   const [category, setCategory] = useState(undefined);
@@ -15,7 +14,16 @@ export default function App() {
   const [initialised, setInitialised] = useState(false);
   return (
     <div className="App">
-      <ContextWrapper {...{ category, setCategory, tags, setTags, initialised, setInitialised }}>
+      <ContextWrapper
+        {...{
+          category,
+          setCategory,
+          tags,
+          setTags,
+          initialised,
+          setInitialised
+        }}
+      >
         <header>
           <MyPickleIcon />
           <Navigation />

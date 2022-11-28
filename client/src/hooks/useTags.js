@@ -7,20 +7,20 @@ const baseURL = "http://localhost:10000";
 let axios;
 
 const getAxios = async () => {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
   if (!axios) {
-    axios = await import('axios').then(m => m.default);
+    axios = await import("axios").then((m) => m.default);
     axios.defaults.baseURL = baseURL;
   }
   return axios;
-}
+};
 
 let categories = [];
 
 let currentIdx = 0;
 
 const getNextCategory = () => {
-  if (currentIdx === categories.length - 1) { 
+  if (currentIdx === categories.length - 1) {
     currentIdx = 0;
     return false;
   }
@@ -31,14 +31,14 @@ const getNextCategory = () => {
 const populateCategories = async (setCategory) => {
   // @TODO: error handling
   const axios = await getAxios();
-  const { data } =  axios.get('/getCategories');
+  const { data } = axios.get("/getCategories");
   categories = data.categories;
   setCategory(categories[0]);
-}
+};
 
 /**
  * @typedef {Object} TagModel
- * @property {String[]} tags - The current list of tags held in state 
+ * @property {String[]} tags - The current list of tags held in state
  * @property {Function} setTags - Setter function to update tags
  * @property {String} category - The current category held in state
  * @property {Function} setCategory - Setter function to update category
@@ -53,19 +53,13 @@ const populateCategories = async (setCategory) => {
  */
 
 export const useTags = () => {
-  const { 
-    tags, 
-    setTags, 
-    category, 
-    setCategory, 
-    initialised, 
-    setInitialised 
-  } = useContext(TagContext);
+  const { tags, setTags, category, setCategory, initialised, setInitialised } =
+    useContext(TagContext);
 
   useEffect(() => {
     if (!initialised) {
       setInitialised(true);
-      populateCategories(setCategory)
+      populateCategories(setCategory);
     }
   }, [setCategory, setInitialised, initialised]);
 
@@ -78,7 +72,10 @@ export const useTags = () => {
 
   const submit = async () => {
     const axios = await getAxios();
-    axios.post('/addTagsToCategory', { categoryId: category.id, tagList: tags });
+    axios.post("/addTagsToCategory", {
+      categoryId: category.id,
+      tagList: tags
+    });
     refresh();
   };
 
