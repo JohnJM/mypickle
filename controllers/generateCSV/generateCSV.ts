@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import { categories } from "../../categories";
 import { prisma } from "../../server";
 import { writeToPath } from "@fast-csv/format";
 import { Category } from "@prisma/client";
 import path from "path";
 import { updateGoogleSpreadSheet } from "./googleSheetsIntegration";
+
 const addTags = async ({ id, name }: Category) => {
   const tags = await prisma.tag.findMany({
     where: { categoryId: id },

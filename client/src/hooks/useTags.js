@@ -1,12 +1,19 @@
 import { createContext } from "preact";
 import { useContext, useEffect } from "preact/hooks";
-import axios from 'axios';
-
 export const TagContext = createContext();
 
 const baseURL = "http://localhost:10000";
 
-const api = axios.create({ baseURL });
+let axios;
+
+const getAxios = async () => {
+  if (typeof window === 'undefined') return null;
+  if (!axios) {
+    axios = await import('axios').then(m => m.default);
+    axios.defaults.baseURL = baseURL;
+  }
+  return axios;
+}
 
 let categories = [];
 
@@ -23,13 +30,37 @@ const getNextCategory = () => {
 
 const populateCategories = async (setCategory) => {
   // @TODO: error handling
-  const { data } = await api.get('/getCategories');
+  const axios = await getAxios();
+  const { data } =  axios.get('/getCategories');
   categories = data.categories;
   setCategory(categories[0]);
 }
 
+/**
+ * @typedef {Object} TagModel
+ * @property {String[]} tags - The current list of tags held in state 
+ * @property {Function} setTags - Setter function to update tags
+ * @property {String} category - The current category held in state
+ * @property {Function} setCategory - Setter function to update category
+ * @property {Function} submit - Submits current state to server and serves next category
+ * @property {Function} skip - Serves next cateogry without submitting current state
+ */
+
+/**
+ * Returns tag and category state, along with helper functions to handle data fetching and tag submission
+ * @returns {{ tags: String[], setTags: () => void, category: String, setCategory: () => void, submit: () => Promise<void>, skip: () => Promise<void> }}
+ * Object containing state and helper functions
+ */
+
 export const useTags = () => {
-  const { tags, setTags, category, setCategory, initialised, setInitialised } = useContext(TagContext);
+  const { 
+    tags, 
+    setTags, 
+    category, 
+    setCategory, 
+    initialised, 
+    setInitialised 
+  } = useContext(TagContext);
 
   useEffect(() => {
     if (!initialised) {
@@ -46,11 +77,10 @@ export const useTags = () => {
   };
 
   const submit = async () => {
-    api.post('/addTagsToCategory', { categoryId: category.id, tagList: tags });
+    const axios = await getAxios();
+    axios.post('/addTagsToCategory', { categoryId: category.id, tagList: tags });
     refresh();
   };
 
-  const skip = () => refresh();
-
-  return { tags, setTags, category, setCategory, submit, skip };
+  return { tags, setTags, category, setCategory, submit, skip: refresh };
 };

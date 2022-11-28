@@ -8,7 +8,8 @@ export const TagAdder = () => {
   const [currentTag, setCurrentTag] = useState("");
   const { tags, setTags } = useTags();
 
-  const handleKeyPress = (event) => {
+  // @TODO: make sure changing this from onKeyPress works
+  const handleKeyDown = (event) => {
     if (event.key === ENTER_KEY) {
       if (currentTag && !tags.includes(currentTag))
         setTags((prevTags) => [...prevTags, currentTag.trim()]);
@@ -26,7 +27,7 @@ export const TagAdder = () => {
         placeholder="Enter keywords..."
         value={currentTag}
         onInput={(e) => setCurrentTag(e.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
       />
       <div className="submittedKeywords">
         {tags.map((tag) => (

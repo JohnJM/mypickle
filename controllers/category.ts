@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { CONSTANTS } from "../constants";
 import { prisma } from "../server";
 import { Category } from "@prisma/client";
 
