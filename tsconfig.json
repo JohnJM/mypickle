@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "lib": [
+        "es2021"
+      ],
+      "module": "NodeNext",
+      "target": "es2021",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "moduleResolution": "node",
+      "types": [
+        "node"
+      ],
+      "sourceMap": true,
+      "inlineSourceMap": false,
+      "inlineSources": true,
+      "declaration": false,
+      "noEmit": false,
+      "outDir": "./.ts-node"
+    }
+  }
