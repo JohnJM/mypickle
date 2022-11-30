@@ -24,15 +24,17 @@ const loadSavedCredentialsIfExist = async () => {
   }
 };
 
-const saveCredentials = async (client: OAuth2Client) => {
+const saveCredentials = async ({
+  credentials: { refresh_token },
+}: OAuth2Client) => {
   const content = await fs.readFile(CREDENTIALS_PATH);
   const keys = JSON.parse(content.toString());
-  const key = keys.installed || keys.web;
+  const { client_id, client_secret } = keys.installed || keys.web;
   const payload = JSON.stringify({
     type: "authorized_user",
-    client_id: key.client_id,
-    client_secret: key.client_secret,
-    refresh_token: client.credentials.refresh_token,
+    client_id,
+    client_secret,
+    refresh_token,
   });
   await fs.writeFile(TOKEN_PATH, payload);
 };
@@ -59,7 +61,6 @@ const clearAndUpdateRows = async (
     spreadsheets: { values: spreadsheet },
   } = google.sheets({ version: "v4", auth });
   const { SPREADSHEET_ID: spreadsheetId } = process.env;
-
   await spreadsheet.clear({
     spreadsheetId,
     range: "Sheet1",
@@ -77,7 +78,6 @@ const clearAndUpdateRows = async (
       ],
     },
   });
-  return true;
 };
 
 const updateGoogleSpreadSheet = async (values: string[][]) => {
