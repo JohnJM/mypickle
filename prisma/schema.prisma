@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  DEFAULT
+  ADMIN
+}
+
 model Category {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
@@ -23,4 +28,11 @@ model Tag {
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId
   count      Int
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String
+  password  String
+  role      UserRole @default(DEFAULT)
 }

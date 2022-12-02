@@ -4,6 +4,7 @@ import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import { CONSTANTS, RATE_LIMIT_OPTIONS } from "./constants";
 import { routes } from "./routes/main";
 
@@ -18,6 +19,7 @@ const main = (app: Express) => {
   const { SERVER_ONLINE_MESSAGE, SERVER_PORT, STATIC_DIRECTORY } = CONSTANTS;
   app.listen(SERVER_PORT, () => console.log(SERVER_ONLINE_MESSAGE));
   app.use(rateLimiter);
+  app.use(cookieParser());
   app.use(morgan("dev"));
   app.use(cors());
   app.use(express.json());
