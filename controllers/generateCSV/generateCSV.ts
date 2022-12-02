@@ -11,8 +11,8 @@ const addTags = async ({ id, name }: Category) => {
   });
   const tagOutput = tags
     .sort((a, b) => b.count - a.count)
-    .map((t) => '"' + t.name + '"' + ": count: " + t.count);
-  return [name, ...(tagOutput || "no tags")];
+    .map((t) => `"${t.name}": count: ${t.count}`);
+  return [name, ...tagOutput];
 };
 
 const generateCSV = async (_req: Request, res: Response) => {
