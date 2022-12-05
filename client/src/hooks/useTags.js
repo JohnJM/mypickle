@@ -32,7 +32,7 @@ const getNextCategory = () => {
 const populateCategories = async (setCategory) => {
   // @TODO: error handling
   const axios = await getAxios();
-  const { data } = axios.get("/getCategories");
+  const { data } = await axios.get("/getCategories");
   categories = data.categories;
   setCategory(categories[0]);
 };
