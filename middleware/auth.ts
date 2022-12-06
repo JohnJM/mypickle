@@ -23,6 +23,6 @@ const getAuthMiddleware =
   };
 
 const sendUnauthorised = (res: Response): Response =>
-  res.status(403).json({ err: "Unauthorised" }).end();
+  res.status(403).json({ error: "Unauthorised" }).end();
 
 export { getAuthMiddleware };

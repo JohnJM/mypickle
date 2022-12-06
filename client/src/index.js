@@ -1,43 +1,92 @@
-import { useState } from "preact/hooks";
+import { useContext, useState } from "preact/hooks";
 import { TagContext } from "./hooks";
 import { Navigation, TagAdder, MyPickleIcon } from "./components";
 import "./styles.css";
+// import { useGenerateCSV } from "./hooks/useGenerateCSV";
+import { AlertContext, useAlerts } from "./hooks/useAlerts";
+import { Alerts } from "./components/Alerts";
+import { GenerateCSVForm } from "./components/GenerateCSV";
 
-// provider extracted to own component to avoid re-rendering all children on every state change
-const ContextWrapper = ({ children, ...values }) => (
-  <TagContext.Provider value={{ ...values }}>{children}</TagContext.Provider>
+//provider extracted to own component to avoid re-rendering all children on every state change
+const ContextWrapper = ({ children, tag, alerts }) => (
+  <TagContext.Provider value={{ ...tag }}>
+    <AlertContext.Provider value={{ ...alerts }}>
+      {children}
+    </AlertContext.Provider>
+  </TagContext.Provider>
 );
 
-export default function App() {
-  const [category, setCategory] = useState(undefined);
+const Header = ({ showNav }) => (
+  <header>
+    <MyPickleIcon />
+    {showNav && <Navigation />}
+  </header>
+);
+
+const TagAdderPage = ({ category, alerts }) => (
+  <main>
+    {!category && <h1>Loading...</h1>}
+    {category && (
+      <>
+        <h1>{category.name}</h1>
+        <TagAdder />
+      </>
+    )}
+  </main>
+);
+
+const Main = ({ category }) => {
+  const { alerts } = useContext(AlertContext);
+  const showGenerateCSVForm =
+    typeof window !== "undefined" &&
+    window.location.href.includes("/?generateCSV");
+
+  return (
+    <>
+      <Header showNav={!showGenerateCSVForm} />
+      {showGenerateCSVForm ? (
+        <GenerateCSVForm />
+      ) : (
+        <TagAdderPage {...{ category, alerts }} />
+      )}
+      {alerts && <Alerts />}
+    </>
+  );
+};
+
+const App = () => {
+  const [category, setCategory] = useState();
   const [tags, setTags] = useState([]);
   const [initialised, setInitialised] = useState(false);
+  const { alerts, pushToAlerts, removeAlert } = useAlerts([]);
+
   return (
     <div className="App">
       <ContextWrapper
         {...{
-          category,
-          setCategory,
-          tags,
-          setTags,
-          initialised,
-          setInitialised
+          tag: {
+            ...{
+              category,
+              setCategory,
+              tags,
+              setTags,
+              initialised,
+              setInitialised
+            }
+          },
+          alerts: {
+            ...{
+              alerts,
+              pushToAlerts,
+              removeAlert
+            }
+          }
         }}
       >
-        <header>
-          <MyPickleIcon />
-          <Navigation />
-        </header>
-        <main>
-          {!category && <h1>Loading...</h1>}
-          {category && (
-            <>
-              <h1>{category.name}</h1>
-              <TagAdder />
-            </>
-          )}
-        </main>
+        <Main {...{ category }} />
       </ContextWrapper>
     </div>
   );
 }
+
+export default App;
