@@ -1,17 +1,10 @@
 import { useContext, useEffect, useState } from "preact/hooks";
 import { AlertContext } from "../hooks/useAlerts";
 import { useAxios } from "../hooks/useAxios";
-
-const LoginForm = () => (
-  <form>
-    <input type="text">XD</input>
-    <input type="submit" />
-  </form>
-);
+import { LoginForm } from "./LoginForm";
 
 const handleGenerateError = ({ response }) => {
-  if (response.status === 403) return 0;
-
+  if (response.status === 403) return "Please login first";
   if (response.data.error === "Failed on google sheet integration")
     return response.data.error;
 
@@ -20,7 +13,7 @@ const handleGenerateError = ({ response }) => {
 
 const GenerateCSVForm = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
-  const {pushToAlerts} = useContext(AlertContext)
+  const { pushToAlerts } = useContext(AlertContext);
 
   const { response, error, fetch } = useAxios({
     url: "/generateCSV",
@@ -33,16 +26,22 @@ const GenerateCSVForm = () => {
   }, []);
 
   useEffect(() => {
-    if(response && response.generatedCSV && !error){
-      console.log("success?", { response, error });
+    if (response && response.generatedCSV && !error) {
       setShowLoginForm(false);
-      pushToAlerts({text: "Generated CSV", type: 'success'})
+      pushToAlerts({ text: "Generated CSV", type: "success" });
     }
   }, [response, error]);
 
   return (
     <div>
-      {showLoginForm ? <LoginForm /> : <a href='/'>Done, click to return to the app</a>}
+      {showLoginForm ? (
+        <LoginForm />
+      ) : (
+        <>
+          <a href="/">Return to the app</a>
+          <a href="/public/output.csv">view output.csv</a>
+        </>
+      )}
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { useContext, useState } from "preact/hooks";
 import { TagContext } from "./hooks";
 import { Navigation, TagAdder, MyPickleIcon } from "./components";
 import "./styles.css";
-// import { useGenerateCSV } from "./hooks/useGenerateCSV";
 import { AlertContext, useAlerts } from "./hooks/useAlerts";
 import { Alerts } from "./components/Alerts";
 import { GenerateCSVForm } from "./components/GenerateCSV";
@@ -23,7 +22,7 @@ const Header = ({ showNav }) => (
   </header>
 );
 
-const TagAdderPage = ({ category, alerts }) => (
+const TagAdderPage = ({ category }) => (
   <main>
     {!category && <h1>Loading...</h1>}
     {category && (
@@ -47,7 +46,7 @@ const Main = ({ category }) => {
       {showGenerateCSVForm ? (
         <GenerateCSVForm />
       ) : (
-        <TagAdderPage {...{ category, alerts }} />
+        <TagAdderPage {...{ category }} />
       )}
       {alerts && <Alerts />}
     </>

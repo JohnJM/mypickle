@@ -23,7 +23,7 @@ const useAxios = ({ url, method, body = null, handleError }) => {
   const [response, setResponse] = useState();
   const [error, setError] = useState();
   const [shouldFetch, setShouldFetch] = useState(false);
-  const { pushToAlerts, alerts } = useContext(AlertContext);
+  const { pushToAlerts } = useContext(AlertContext);
 
   const fetch = () => {
     setShouldFetch(true);

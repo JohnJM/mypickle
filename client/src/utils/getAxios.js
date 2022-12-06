@@ -11,6 +11,4 @@ const getAxios = async () => {
   return axios;
 };
 
-
-
 export { getAxios };

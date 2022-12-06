@@ -3,6 +3,8 @@
   --hightlight-active: #0634ff;
   --background: #e7f1fb;
   --button-transition: 50ms ease-out;
+  --error: #ff1b1b;
+  --success: #18e68c;
 }
 
 html,
@@ -33,7 +35,8 @@ header {
   display: flex;
 }
 
-.navigation button {
+.navigation button,
+.pickleButton {
   margin-left: 0.5rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -58,13 +61,15 @@ button {
 }
 
 button:hover,
-.submittedKeyword:hover {
+.submittedKeyword:hover,
+.pickleButton:hover {
   background: var(--hightlight-active);
   transform: scale(1.05);
 }
 
 button:active,
-.submittedKeyword:active {
+.submittedKeyword:active,
+.pickleButton:active {
   transform: scale(1.1);
 }
 
@@ -122,4 +127,19 @@ button:active,
   background: none;
   border: none;
   font-size: 1rem;
+}
+
+.alert {
+  padding: 0.5rem;
+  color: white;
+  background-color: var(--success);
+  max-width: 100px;
+  margin: 1rem auto;
+
+  transition: var(--button-transition);
+  animation: addWord 100ms;
+}
+
+.alert-err {
+  background-color: var(--error);
 }
