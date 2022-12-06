@@ -14,7 +14,11 @@ const useAlerts = (list) => {
     setAlerts(() => newAlerts);
   };
 
-  return { alerts, pushToAlerts, removeAlert };
+  const removeAllAlerts = () => {
+    setAlerts(() => []);
+  };
+
+  return { alerts, pushToAlerts, removeAlert, removeAllAlerts };
 };
 
 export { useAlerts, AlertContext };

@@ -4,7 +4,7 @@ import { useAxios } from "../hooks/useAxios";
 import { LoginForm } from "./LoginForm";
 
 const handleGenerateError = ({ response }) => {
-  if (response.status === 403) return "Please login first";
+  if (response.status === 403) return "Unauthorised; admin login required";
   if (response.data.error === "Failed on google sheet integration")
     return response.data.error;
 
@@ -13,7 +13,7 @@ const handleGenerateError = ({ response }) => {
 
 const GenerateCSVForm = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
-  const { pushToAlerts } = useContext(AlertContext);
+  const { pushToAlerts, removeAllAlerts } = useContext(AlertContext);
 
   const { response, error, fetch } = useAxios({
     url: "/generateCSV",
@@ -23,23 +23,26 @@ const GenerateCSVForm = () => {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [showLoginForm]);
 
   useEffect(() => {
-    if (response && response.generatedCSV && !error) {
+    if (response?.generatedCSV && !error) {
+      removeAllAlerts();
       setShowLoginForm(false);
       pushToAlerts({ text: "Generated CSV", type: "success" });
     }
-  }, [response, error]);
+  }, [response, error, showLoginForm]);
+  1;
 
   return (
     <div>
       {showLoginForm ? (
-        <LoginForm />
+        <LoginForm {...{ setShowLoginForm }} />
       ) : (
         <>
-          <a href="/">Return to the app</a>
-          <a href="/public/output.csv">view output.csv</a>
+          <a href="/">Return to the app</a> <br />
+          <br />
+          <a href="/public/output.csv">Download sheet (output.csv)</a>
         </>
       )}
     </div>

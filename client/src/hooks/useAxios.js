@@ -22,10 +22,12 @@ const hookGetAxios = async () => {
 const useAxios = ({ url, method, body = null, handleError }) => {
   const [response, setResponse] = useState();
   const [error, setError] = useState();
-  const [shouldFetch, setShouldFetch] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState();
   const { pushToAlerts } = useContext(AlertContext);
 
   const fetch = () => {
+    setError(() => undefined);
+    setResponse(() => undefined);
     setShouldFetch(true);
   };
 

@@ -22,7 +22,7 @@ const Header = ({ showNav }) => (
   </header>
 );
 
-const TagAdderPage = ({ category }) => (
+const AddTagPage = ({ category }) => (
   <main>
     {!category && <h1>Loading...</h1>}
     {category && (
@@ -46,7 +46,7 @@ const Main = ({ category }) => {
       {showGenerateCSVForm ? (
         <GenerateCSVForm />
       ) : (
-        <TagAdderPage {...{ category }} />
+        <AddTagPage {...{ category }} />
       )}
       {alerts && <Alerts />}
     </>
@@ -57,7 +57,7 @@ const App = () => {
   const [category, setCategory] = useState();
   const [tags, setTags] = useState([]);
   const [initialised, setInitialised] = useState(false);
-  const { alerts, pushToAlerts, removeAlert } = useAlerts([]);
+  const { removeAllAlerts, alerts, pushToAlerts, removeAlert } = useAlerts([]);
 
   return (
     <div className="App">
@@ -77,7 +77,8 @@ const App = () => {
             ...{
               alerts,
               pushToAlerts,
-              removeAlert
+              removeAlert,
+              removeAllAlerts
             }
           }
         }}
@@ -86,6 +87,6 @@ const App = () => {
       </ContextWrapper>
     </div>
   );
-}
+};
 
 export default App;
