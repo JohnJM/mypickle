@@ -93,7 +93,8 @@ button:active,
   flex-wrap: wrap;
 }
 
-.submittedKeyword {
+.submittedKeyword,
+.alert {
   display: flex;
   align-items: center;
   background: var(--highlight);
@@ -105,7 +106,8 @@ button:active,
   animation: addWord 100ms;
 }
 
-.submittedKeyword svg {
+.submittedKeyword svg,
+.alert svg {
   width: 1.5rem;
   height: 1.5rem;
 }
@@ -130,14 +132,9 @@ button:active,
 }
 
 .alert {
-  padding: 0.5rem;
-  color: white;
   background-color: var(--success);
-  max-width: 100px;
+  width: fit-content;
   margin: 1rem auto;
-
-  transition: var(--button-transition);
-  animation: addWord 100ms;
 }
 
 .alert-err {

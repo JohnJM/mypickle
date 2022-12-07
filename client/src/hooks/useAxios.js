@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "preact/hooks";
-import { getAxios } from "../utils";
 import { AlertContext } from "./useAlerts";
 
 const baseURL = "http://localhost:10000";
 
 let axios;
+
 // guard access to axios object so it doesn't explode during pre-render
-const hookGetAxios = async () => {
+const getAxios = async () => {
   try {
     if (typeof window === "undefined") return null;
     if (!axios) {
@@ -19,7 +19,7 @@ const hookGetAxios = async () => {
   }
 };
 
-const useAxios = ({ url, method, body = null, handleError }) => {
+const useAxios = ({ url, method, body = null, handleError = () => {} }) => {
   const [response, setResponse] = useState();
   const [error, setError] = useState();
   const [shouldFetch, setShouldFetch] = useState();
@@ -32,11 +32,10 @@ const useAxios = ({ url, method, body = null, handleError }) => {
   };
 
   const fetchData = async () => {
-    const axios = await hookGetAxios();
+    const axios = await getAxios();
     axios[method](url, body)
       .then(({ data }) => {
         setResponse(data);
-        return data;
       })
       .catch((err) => {
         const formattedError = handleError(err);
@@ -46,7 +45,6 @@ const useAxios = ({ url, method, body = null, handleError }) => {
         }
         setError(true);
       });
-
     return { response, error };
   };
 
