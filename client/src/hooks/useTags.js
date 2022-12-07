@@ -36,7 +36,6 @@ const getCategoriesErrHandler = ({ response }) => {
  * @returns {{ tags: String[], setTags: () => void, category: String, setCategory: () => void, submit: () => Promise<void>, skip: () => Promise<void> }}
  * Object containing state and helper functions
  */
-
 export const useTags = () => {
   const { tags, setTags, category, setCategory, initialised, setInitialised } =
     useContext(TagContext);
@@ -61,6 +60,7 @@ export const useTags = () => {
 
   useEffect(() => {
     if (catRes && !catErr) {
+      categories = catRes.categories;
       setCategory(catRes.categories[0]);
     }
   }, [catRes, catErr]);
