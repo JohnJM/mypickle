@@ -1,19 +1,22 @@
 import { useContext, useEffect, useState } from "preact/hooks";
+import { constants } from "../constants";
 import { AlertContext } from "../hooks/useAlerts";
 import { useAxios } from "../hooks/useAxios";
 import { LoginForm } from "./LoginForm";
 
-const handleGenerateError = ({ response }) => {
-  if (response.status === 403) return "Unauthorised; admin login required";
-  if (response.data.error === "Failed on google sheet integration")
-    return response.data.error;
 
-  return "Server error";
-};
 
 const GenerateCSVForm = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
   const { pushToAlerts, removeAllAlerts } = useContext(AlertContext);
+
+  const handleGenerateError = ({ response }) => {
+    removeAllAlerts();
+    if (response.status === 403) return "Unauthorised; admin login required";
+    if (response.data.error === "Failed on google sheet integration")
+      return response.data.error;
+    return constants.SERVER_500_MSG;
+  };
 
   const { response, error, fetch } = useAxios({
     url: "/generateCSV",

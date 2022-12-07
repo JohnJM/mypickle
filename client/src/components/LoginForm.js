@@ -34,7 +34,10 @@ const LoginForm = ({ setShowLoginForm }) => {
 
   useEffect(() => {
     if (response?.token && !error) {
-      pushToAlerts({ text: `Logged in as ${response.name}`, type: "success" });
+      pushToAlerts({
+        text: `Logged in as ${response.name}`,
+        type: "success"
+      });
       setShowLoginForm(() => false);
     }
   }, [response, error]);

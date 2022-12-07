@@ -11,8 +11,8 @@ const Alerts = () => {
     }, 1998);
   };
 
-  return alerts.map(({ text, type }, index) => {
-    if (type === "success") removeAlertAfterSomeTime(index);
+  return alerts.map(({ text, type, autoRm }, index) => {
+    if (autoRm) removeAlertAfterSomeTime(index);
     return (
       <p
         class={`alert ${type === "error" && "alert-err"}`}

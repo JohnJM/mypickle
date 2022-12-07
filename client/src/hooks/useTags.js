@@ -92,7 +92,11 @@ export const useTags = () => {
 
   useEffect(() => {
     if (postTagRes?.success && !postTagErr) {
-      pushToAlerts({ text: "Thanks - tag posted", type: "success" });
+      pushToAlerts({
+        autoRm: true,
+        text: "Thanks - tag posted",
+        type: "success"
+      });
       refresh();
     }
   }, [postTagRes, postTagErr]);
