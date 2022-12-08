@@ -6,7 +6,7 @@ const RATE_LIMIT_OPTIONS = {
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
-  skip: (req: Request) => req.route.path === "/healthCheck",
+  skip: (req: Request) => req?.route?.path === "/healthCheck",
 };
 
 const SERVER_PORT = 10000;
