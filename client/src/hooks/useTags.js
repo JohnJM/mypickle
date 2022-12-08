@@ -1,20 +1,9 @@
 import { createContext } from "preact";
 import { useContext, useEffect } from "preact/hooks";
+import { constants } from "../constants";
+import { AlertContext } from "./useAlerts";
+import { useAxios } from "./useAxios";
 export const TagContext = createContext();
-
-const baseURL = "http://localhost:10000";
-
-let axios;
-
-// guard access to axios object so it doesn't explode during pre-render
-const getAxios = async () => {
-  if (typeof window === "undefined") return null;
-  if (!axios) {
-    axios = await import("axios").then((m) => m.default);
-    axios.defaults.baseURL = baseURL;
-  }
-  return axios;
-};
 
 let categories = [];
 
@@ -28,14 +17,7 @@ const getNextCategory = () => {
   currentIdx++;
   return categories[currentIdx];
 };
-
-const populateCategories = async (setCategory) => {
-  // @TODO: error handling
-  const axios = await getAxios();
-  const { data } = await axios.get("/getCategories");
-  categories = data.categories;
-  setCategory(categories[0]);
-};
+const getCategoriesErrHandler = () => constants.SERVER_500_MSG;
 
 /**
  * @typedef {Object} TagModel
@@ -44,7 +26,7 @@ const populateCategories = async (setCategory) => {
  * @property {String} category - The current category held in state
  * @property {Function} setCategory - Setter function to update category
  * @property {Function} submit - Submits current state to server and serves next category
- * @property {Function} skip - Serves next cateogry without submitting current state
+ * @property {Function} skip - Serves next category without submitting current state
  */
 
 /**
@@ -52,33 +34,83 @@ const populateCategories = async (setCategory) => {
  * @returns {{ tags: String[], setTags: () => void, category: String, setCategory: () => void, submit: () => Promise<void>, skip: () => Promise<void> }}
  * Object containing state and helper functions
  */
-
 export const useTags = () => {
   const { tags, setTags, category, setCategory, initialised, setInitialised } =
     useContext(TagContext);
+  const { pushToAlerts } = useContext(AlertContext);
+
+  const {
+    fetch: fetchCategories,
+    response: catRes,
+    error: catErr
+  } = useAxios({
+    url: "/getCategories",
+    method: "get",
+    handleError: getCategoriesErrHandler
+  });
 
   useEffect(() => {
     if (!initialised) {
       setInitialised(true);
-      populateCategories(setCategory);
+      fetchCategories();
     }
   }, [setCategory, setInitialised, initialised]);
+
+  useEffect(() => {
+    if (catRes && !catErr) {
+      categories = catRes.categories;
+      setCategory(catRes.categories[0]);
+    }
+  }, [catRes, catErr]);
 
   const refresh = async () => {
     setTags([]);
     const nextCategory = getNextCategory();
     if (nextCategory) setCategory(nextCategory);
-    else populateCategories(setCategory);
+    else fetchCategories();
   };
 
-  const submit = async () => {
-    const axios = await getAxios();
-    axios.post("/addTagsToCategory", {
-      categoryId: category.id,
+  const postTagErrorHandler = ({ response }) => {
+    if (response.status === 400) return "No tags provided";
+    return constants.GENERIC_SERVER_ERR_MESSAGE;
+  };
+  const {
+    fetch: postTags,
+    response: postTagRes,
+    error: postTagErr,
+    loading
+  } = useAxios({
+    url: "/addTagsToCategory",
+    method: "post",
+    body: {
+      categoryId: category?.id,
       tagList: tags
-    });
-    refresh();
+    },
+    handleError: postTagErrorHandler
+  });
+
+  useEffect(() => {
+    if (postTagRes?.success && !postTagErr) {
+      pushToAlerts({
+        autoRm: true,
+        text: "Thanks - tag posted",
+        type: "success"
+      });
+      refresh();
+    }
+  }, [postTagRes, postTagErr]);
+
+  const submit = () => {
+    postTags();
   };
 
-  return { tags, setTags, category, setCategory, submit, skip: refresh };
+  return {
+    tags,
+    setTags,
+    category,
+    setCategory,
+    submit,
+    skip: refresh,
+    loading
+  };
 };

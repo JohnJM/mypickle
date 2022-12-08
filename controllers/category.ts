@@ -29,7 +29,8 @@ const addTagsToCategory = async (
     return res.status(201).json({ success: true });
   } catch (err) {
     const { message } = err as Error;
-    return res.status(500).json({ error: message });
+    console.error({ error: message });
+    return res.status(500).end();
   }
 };
 
@@ -51,7 +52,8 @@ const getCategories = async (
     });
   } catch (err) {
     const { message } = err as Error;
-    return res.status(500).json({ error: message });
+    console.error({ error: message });
+    return res.status(500).end();
   }
 };
 

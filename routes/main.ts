@@ -14,7 +14,7 @@ routes.get("/healthCheck", (_, res) => res.status(200).end());
 routes.post("/populateCategories", genCategories);
 routes.post("/addTagsToCategory", addTagsToCategory);
 routes.get("/getCategories", getCategories);
-routes.get("/generateCSV", [requireAuth, generateCSV]);
+routes.post("/generateCSV", [requireAuth, generateCSV]);
 
 routes.post("/register", register);
 routes.post("/login", login);
