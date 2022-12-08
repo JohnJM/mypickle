@@ -1,5 +1,5 @@
 const constants = {
-  SERVER_500_MSG: "Request failed - please try again later."
+  GENERIC_SERVER_ERR_MESSAGE: "Request failed - please try again later."
 };
 
 export { constants };

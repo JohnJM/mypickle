@@ -14,7 +14,7 @@ const LoginForm = ({ setShowLoginForm }) => {
 
   const handleError = ({ response: status }) => {
     if (status === 400) return "Incorrect credentials";
-    return constants.SERVER_500_MSG;
+    return constants.GENERIC_SERVER_ERR_MESSAGE;
   };
 
   const { fetch, response, error } = useAxios({

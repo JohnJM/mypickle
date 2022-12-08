@@ -13,7 +13,7 @@ const GenerateCSVForm = () => {
     if (response.status === 403) return "Unauthorised; admin login required";
     if (response.data.error === "Failed on google sheet integration")
       return response.data.error;
-    return constants.SERVER_500_MSG;
+    return constants.GENERIC_SERVER_ERR_MESSAGE;
   };
 
   const { response, error, fetch } = useAxios({

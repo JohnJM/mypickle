@@ -72,7 +72,7 @@ export const useTags = () => {
 
   const postTagErrorHandler = ({ response }) => {
     if (response.status === 400) return "No tags provided";
-    return constants.SERVER_500_MSG;
+    return constants.GENERIC_SERVER_ERR_MESSAGE;
   };
   const {
     fetch: postTags,
