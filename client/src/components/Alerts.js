@@ -15,7 +15,7 @@ const Alerts = () => {
     if (autoRm) removeAlertAfterSomeTime(index);
     return (
       <p
-        class={`alert ${type === "error" && "alert-err"}`}
+        class={`alert${type === "error" ? " alert-err" : ""}`}
         onClick={() => removeAlert(index)}
         key={index}
       >

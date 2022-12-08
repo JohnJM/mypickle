@@ -7,7 +7,7 @@ const useAlerts = (list) => {
   const [alerts, setAlerts] = useState(list);
 
   const pushToAlerts = (alert) => {
-    setAlerts((prev) => [...[...prev, alert]]);
+    setAlerts((prev) => [...prev, alert]);
   };
 
   const removeAlert = (id) => {
