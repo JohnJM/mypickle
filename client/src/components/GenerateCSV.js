@@ -4,8 +4,6 @@ import { AlertContext } from "../hooks/useAlerts";
 import { useAxios } from "../hooks/useAxios";
 import { LoginForm } from "./LoginForm";
 
-
-
 const GenerateCSVForm = () => {
   const [showLoginForm, setShowLoginForm] = useState(true);
   const { pushToAlerts, removeAllAlerts } = useContext(AlertContext);
