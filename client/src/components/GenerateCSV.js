@@ -33,7 +33,7 @@ const GenerateCSVForm = () => {
       pushToAlerts({ text: "Generated CSV", type: "success" });
     }
   }, [response, error, showLoginForm]);
-  1;
+
 
   return (
     <div>
