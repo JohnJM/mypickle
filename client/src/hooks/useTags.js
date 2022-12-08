@@ -89,8 +89,6 @@ export const useTags = () => {
     handleError: postTagErrorHandler
   });
 
-  console.log("tag hook load state", { loading });
-
   useEffect(() => {
     if (postTagRes?.success && !postTagErr) {
       pushToAlerts({
