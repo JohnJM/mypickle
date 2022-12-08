@@ -17,9 +17,7 @@ const getNextCategory = () => {
   currentIdx++;
   return categories[currentIdx];
 };
-const getCategoriesErrHandler = ({ response }) => {
-  if (response.status === 500) return constants.SERVER_500_MSG;
-};
+const getCategoriesErrHandler = () => constants.SERVER_500_MSG;
 
 /**
  * @typedef {Object} TagModel
@@ -74,12 +72,13 @@ export const useTags = () => {
 
   const postTagErrorHandler = ({ response }) => {
     if (response.status === 400) return "No tags provided";
-    if (response.status === 500) return constants.SERVER_500_MSG;
+    return constants.SERVER_500_MSG;
   };
   const {
     fetch: postTags,
     response: postTagRes,
-    error: postTagErr
+    error: postTagErr,
+    loading
   } = useAxios({
     url: "/addTagsToCategory",
     method: "post",
@@ -89,6 +88,8 @@ export const useTags = () => {
     },
     handleError: postTagErrorHandler
   });
+
+  console.log("tag hook load state", { loading });
 
   useEffect(() => {
     if (postTagRes?.success && !postTagErr) {
@@ -105,5 +106,13 @@ export const useTags = () => {
     postTags();
   };
 
-  return { tags, setTags, category, setCategory, submit, skip: refresh };
+  return {
+    tags,
+    setTags,
+    category,
+    setCategory,
+    submit,
+    skip: refresh,
+    loading
+  };
 };

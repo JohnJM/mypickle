@@ -22,30 +22,33 @@ const getAxios = async () => {
 const useAxios = ({ url, method, body = null, handleError = () => {} }) => {
   const [response, setResponse] = useState();
   const [error, setError] = useState();
+  const [loading, setLoading] = useState();
   const [shouldFetch, setShouldFetch] = useState();
   const { pushToAlerts } = useContext(AlertContext);
 
   const fetch = () => {
     setError(() => undefined);
     setResponse(() => undefined);
+    setLoading(() => undefined);
     setShouldFetch(true);
   };
 
   const fetchData = async () => {
-    const axios = await getAxios();
-    axios[method](url, body)
-      .then(({ data }) => {
-        setResponse(data);
-      })
-      .catch((err) => {
-        const formattedError = handleError(err);
-        if (formattedError) {
-          pushToAlerts({ text: formattedError, type: "error" });
-          setResponse(formattedError);
-        }
-        setError(true);
-      });
-    return { response, error };
+    try {
+      setLoading(true);
+      const axios = await getAxios();
+      const { data } = await axios[method](url, body);
+      setResponse(data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      const formattedError = handleError(err);
+      if (formattedError) {
+        pushToAlerts({ text: formattedError, type: "error" });
+        setResponse(formattedError);
+      }
+      setError(true);
+    }
   };
 
   useEffect(() => {
@@ -55,7 +58,7 @@ const useAxios = ({ url, method, body = null, handleError = () => {} }) => {
     return setShouldFetch(false);
   }, [method, url, body, shouldFetch]);
 
-  return { response, error, fetch };
+  return { response, error, fetch, loading };
 };
 
 export { useAxios };

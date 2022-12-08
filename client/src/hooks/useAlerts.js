@@ -7,6 +7,7 @@ const useAlerts = (list) => {
   const [alerts, setAlerts] = useState(list);
 
   const pushToAlerts = (alert) => {
+    if (alerts.length >= 5) removeAlert(alerts[0]);
     setAlerts((prev) => [...prev, alert]);
   };
 
@@ -19,10 +20,6 @@ const useAlerts = (list) => {
   const removeAllAlerts = () => {
     setAlerts(() => []);
   };
-
-  useEffect(() => {
-    if (alerts.length >= 5) removeAlert(alerts[0]);
-  }, [alerts]);
 
   return { alerts, pushToAlerts, removeAlert, removeAllAlerts };
 };
