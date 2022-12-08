@@ -12,7 +12,7 @@ const LoginForm = ({ setShowLoginForm }) => {
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleError = ({ response: status }) => {
+  const handleError = ({ response: { status } }) => {
     if (status === 400) return "Incorrect credentials";
     return constants.GENERIC_SERVER_ERR_MESSAGE;
   };
