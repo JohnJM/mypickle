@@ -11,7 +11,7 @@ const addTags = async ({ id, name }: Category) => {
   });
   const tagOutput = tags
     .sort((a, b) => b.count - a.count)
-    .map((t) => `"${t.name}": count: ${t.count}`);
+    .map(t => `"${t.name}": count: ${t.count}`);
   return [name, ...tagOutput];
 };
 
@@ -34,7 +34,11 @@ const generateCSV = async (_req: Request, res: Response) => {
     return res.status(200).json({ generatedCSV: true });
   } catch (err) {
     const { message } = err as Error;
-    return res.status(500).json({ error: message });
+    console.error({ error: message });
+    if (message === "Failed on google sheet integration") {
+      return res.status(500).json({ error: message });
+    }
+    return res.status(500).end();
   }
 };
 

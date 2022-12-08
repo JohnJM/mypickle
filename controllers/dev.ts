@@ -17,8 +17,7 @@ const genCategories = async (_req: Request, res: Response) => {
     });
     return res.status(201).json({ success: true, count });
   } catch (err) {
-    const { message } = err as Error;
-    return res.status(500).json({ error: message });
+    return res.status(500).end();
   }
 };
 
