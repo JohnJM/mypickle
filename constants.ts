@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { categories } from "./categories";
 
 const RATE_LIMIT_OPTIONS = {
@@ -5,6 +6,7 @@ const RATE_LIMIT_OPTIONS = {
   max: 100,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req: Request) => req.route.path === "/healthCheck",
 };
 
 const SERVER_PORT = 10000;
